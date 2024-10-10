@@ -82,12 +82,13 @@ class AlbumService {
     }
   }
 
-  async deleteAlbum(id: string) {
-    const album = await this.albumRepo.findOne({
-      where: {
-        id,
-      },
-    });
+  async deleteAlbum(id: string, userId: string) {
+    const album = await this.albumRepo
+      .createQueryBuilder("album")
+      .leftJoinAndSelect("album.auth", "auth")
+      .where("album.id = :id", { id })
+      .andWhere("auth.id = :userId", { userId })
+      .getOne();
     if (!album) return "Album not found";
     await this.albumRepo.delete(id);
     return "Album deleted";

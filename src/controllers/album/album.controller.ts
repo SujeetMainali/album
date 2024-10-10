@@ -2,6 +2,8 @@ import { AlbumDTO, UpdateAlbumDTO } from "../../dtos/album/album.dto";
 import { StatusCodes } from "../../constant/statusCodes";
 import { Request, Response } from "express";
 import AlbumService from "../../services/album/album.service";
+import HttpException from "../../helpers/HttpException.helper";
+import { Message } from "../../constant/messages";
 class AlbumController {
   constructor(private readonly albumService = new AlbumService()) {}
 
@@ -37,7 +39,9 @@ class AlbumController {
 
   async delete(req: Request, res: Response) {
     const { id } = req.params;
-    const data = await this.albumService.deleteAlbum(id);
+    const user = req.user;
+    if (!user) throw HttpException.unauthorized(Message.notAuthorized);
+    const data = await this.albumService.deleteAlbum(id, user.id as string);
     res.status(StatusCodes.SUCCESS).json({
       status: true,
       data,
