@@ -11,7 +11,7 @@ import express, {
 import rateLimit from "express-rate-limit";
 import { DotenvConfig } from "../config/env.config";
 import path from "path";
-// import routes from "../routes/index.route";
+import routes from "../routes/index";
 import { StatusCodes } from "../constant/statusCodes";
 import { errorHandler } from "./errorHandler.middleware";
 import { morganMiddleware } from "./morgan.middleware";
@@ -56,7 +56,7 @@ const middleware = (app: Application) => {
   app.use(morganMiddleware);
   app.use(cookieParser());
   app.use(bodyParser.urlencoded({ extended: true }));
-  // app.use("/api", routes);
+  app.use("/api", routes);
 
   if (DotenvConfig.NODE_ENV === EnvironmentModes.PRODUCTION) {
     app.use(
