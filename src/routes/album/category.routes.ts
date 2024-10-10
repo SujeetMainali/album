@@ -27,3 +27,5 @@ router
 router
   .route("/:id")
   .delete(authorization([Role.ADMIN]), catchAsync(categoryController.delete));
+
+export default router;

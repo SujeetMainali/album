@@ -13,7 +13,8 @@ class CategoryController {
     const category = await this.categoryService.createCategory(data);
     res.status(StatusCodes.CREATED).json({
       status: true,
-      message: category,
+      data: category,
+      message: "Category created",
     });
   }
 
@@ -22,7 +23,8 @@ class CategoryController {
     const category = await this.categoryService.updateCategory(data);
     res.status(StatusCodes.SUCCESS).json({
       status: true,
-      message: category,
+      data: category,
+      message: "Category updated",
     });
   }
 
@@ -30,7 +32,8 @@ class CategoryController {
     const category = await this.categoryService.getCategories();
     res.status(StatusCodes.SUCCESS).json({
       status: true,
-      message: category,
+      data: category,
+      message: "Categories fetched",
     });
   }
 
@@ -39,7 +42,8 @@ class CategoryController {
     const category = await this.categoryService.deleteCategory(id);
     res.status(StatusCodes.SUCCESS).json({
       status: true,
-      message: "Token refreshed",
+      data: category,
+      message: "Category deleted",
     });
   }
 }

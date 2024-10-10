@@ -10,6 +10,12 @@ class AlbumService {
     private readonly mediaService = new MediaService()
   ) {}
 
+  async getAll() {
+    return this.albumRepo.find({
+      relations: ["category", "media"],
+    });
+  }
+
   async createAlbum(data: AlbumDTO) {
     const category = await this.categoryService.getCategoryById(data.category);
     if (!category) return "Category not found";
@@ -32,10 +38,10 @@ class AlbumService {
     return album.save();
   }
 
-  async updateAlbum(id: string, data: UpdateAlbumDTO) {
+  async updateAlbum(data: UpdateAlbumDTO) {
     const album = await this.albumRepo.findOne({
       where: {
-        id,
+        id: data?.id,
       },
       relations: ["category"],
     });
@@ -69,6 +75,17 @@ class AlbumService {
         })
       );
     }
+  }
+
+  async deleteAlbum(id: string) {
+    const album = await this.albumRepo.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!album) return "Album not found";
+    await this.albumRepo.delete(id);
+    return "Album deleted";
   }
 }
 
