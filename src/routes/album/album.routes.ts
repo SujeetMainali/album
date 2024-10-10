@@ -12,17 +12,20 @@ router
   .route("/")
   .get(catchAsync(albumController.getAll))
   .post(
-    authorization([Role.ADMIN]),
+    authorization([Role.USER, Role.ADMIN]),
     RequestValidator.validate(AlbumDTO),
     albumController.create
   )
   .patch(
-    authorization([Role.ADMIN]),
+    authorization([Role.ADMIN, Role.USER]),
     RequestValidator.validate(UpdateAlbumDTO),
     albumController.update
   );
 router
   .route("/:id")
-  .delete(authorization([Role.ADMIN]), catchAsync(albumController.delete));
+  .delete(
+    authorization([Role.ADMIN, Role.USER]),
+    catchAsync(albumController.delete)
+  );
 
 export default router;

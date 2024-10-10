@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import Base from "./base.entity";
 import { Role } from "../constant/enums";
+import { Album } from "./album/album.entity";
 
 @Entity("auth")
 export class Auth extends Base {
@@ -48,4 +49,7 @@ export class Auth extends Base {
     default: () => "CURRENT_TIMESTAMP",
   })
   lastResetAttempt: Date;
+
+  @OneToMany(() => Album, (album) => album.auth)
+  albums: Album[];
 }

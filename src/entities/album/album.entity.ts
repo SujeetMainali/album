@@ -2,6 +2,7 @@ import { Column, ManyToOne, OneToMany } from "typeorm";
 import Base from "../../entities/base.entity";
 import { Category } from "./category.entity";
 import Media from "../media.entity";
+import { Auth } from "../auth.entity";
 
 export class Album extends Base {
   @Column({
@@ -34,4 +35,9 @@ export class Album extends Base {
 
   @ManyToOne(() => Category, (category) => category.albums)
   category: Category;
+
+  @ManyToOne(() => Auth, (auth) => auth.albums, {
+    onDelete: "CASCADE",
+  })
+  auth: Auth;
 }

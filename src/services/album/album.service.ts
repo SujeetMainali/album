@@ -3,11 +3,14 @@ import { AppDataSource } from "../../config/database.config";
 import { Album } from "../../entities/album/album.entity";
 import CategoryService from "./category.service";
 import { MediaService } from "../../services/media.service";
+import AuthService from "../../services/auth.service";
+import { Auth } from "../../entities/auth.entity";
 class AlbumService {
   constructor(
     private readonly albumRepo = AppDataSource.getRepository(Album),
     private readonly categoryService = new CategoryService(),
-    private readonly mediaService = new MediaService()
+    private readonly mediaService = new MediaService(),
+    private readonly authService = new AuthService()
   ) {}
 
   async getAll() {
@@ -16,14 +19,16 @@ class AlbumService {
     });
   }
 
-  async createAlbum(data: AlbumDTO) {
+  async createAlbum(data: AlbumDTO, user: any) {
     const category = await this.categoryService.getCategoryById(data.category);
     if (!category) return "Category not found";
+    const createdBy = await this.authService.getById(user.id);
     const newAlbum = new Album();
     newAlbum.title = data.title;
     newAlbum.description = data.description;
     newAlbum.photographer = data.photographer;
     newAlbum.year = data.year;
+    newAlbum.auth = createdBy;
     newAlbum.category = category;
     const album = await this.albumRepo.save(newAlbum);
     if (data?.media && data?.media.length > 0) {

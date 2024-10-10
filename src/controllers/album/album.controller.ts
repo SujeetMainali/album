@@ -7,7 +7,8 @@ class AlbumController {
 
   async create(req: Request, res: Response) {
     const data = req.body as AlbumDTO;
-    const category = await this.albumService.createAlbum(data);
+    const user = req.user;
+    const category = await this.albumService.createAlbum(data, user);
     res.status(StatusCodes.CREATED).json({
       status: true,
       data: category,
